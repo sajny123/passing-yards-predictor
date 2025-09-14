@@ -1,30 +1,12 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression, Ridge
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.ensemble import RandomForestRegressor, HistGradientBoostingRegressor
 import numpy as np
 import matplotlib.pyplot as plt
-
-def train_linear(X_train, y_train):
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    return model
-
-def train_random_forest(X_train, y_train):
-    model = RandomForestRegressor()
-    model.fit(X_train, y_train)
-    return model
-
-def train_ridge(X_train, y_train):
-    model = Ridge()
-    model.fit(X_train, y_train)
-    return model
-
-def train_hist_gb(X_train, y_train):
-    model = HistGradientBoostingRegressor()
-    model.fit(X_train, y_train)
-    return model
+from models.linear_model import train_linear
+from models.random_forest_model import train_random_forest
+from models.ridge_model import train_ridge
+from models.gradient_boosting_model import train_hist_gb
 
 def evaluate_data(model, X_test, y_test):
     y_pred = model.predict(X_test)
@@ -44,10 +26,10 @@ y = top_players["Yds"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-#model = train_linear(X_train, y_train)
-#model = train_random_forest(X_train, y_train)
-model = train_ridge(X_train, y_train)
-#model = train_hist_gb(X_train, y_train)
+# model = train_linear(X_train, y_train)
+# model = train_random_forest(X_train, y_train)
+# model = train_ridge(X_train, y_train)
+model = train_hist_gb(X_train, y_train)
 
 evaluate_data(model, X_test, y_test)
 
