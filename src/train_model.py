@@ -4,23 +4,24 @@ from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 import matplotlib.pyplot as plt
 # from models.linear_model import train_linear
-# from models.random_forest_model import train_random_forest
+from models.random_forest_model import train_random_forest
 # from models.ridge_model import train_ridge
 # from models.gradient_boosting_model import train_hist_gb
 from features.feature_engineering import add_features
 from models.factory import get_model
 import argparse
+from features.feature_selection import select_top_features
 
 def evaluate_data(model, X_test, y_test):
     y_pred = model.predict(X_test)
     print("R2 score: ", r2_score(y_test, y_pred))
     print ("RMSE: ", np.sqrt(mean_squared_error(y_test, y_pred)))
-    # residuals = y_test - y_pred
-    # plt.scatter(y_pred, residuals)
-    # plt.axhline(0, color='red')
-    # plt.xlabel("Predicted yards")
-    # plt.ylabel("Residuals")
-    # plt.show()
+    residuals = y_test - y_pred
+    plt.scatter(y_pred, residuals)
+    plt.axhline(0, color='red')
+    plt.xlabel("Predicted yards")
+    plt.ylabel("Residuals")
+    plt.show()
     return y_pred
 
 # parser = argparse.ArgumentParser()
@@ -39,13 +40,17 @@ X = top_players.drop(columns=["Yds"])
 y = top_players["Yds"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, selected = select_top_features(X_train, y_train, X_test, k=10)
+print("Selected Features: ", selected)
 
-for m in ["linear", "ridge", "random_forest", "hist_gb"]:
-    model = get_model(m)
-    model.fit(X_train, y_train)
-    print(f"Model: {m}")
-    evaluate_data(model, X_test, y_test)
-    print("-------------------------------")
+model = train_random_forest(X_train, y_train)
+evaluate_data(model, X_test, y_test)
+# for m in ["linear", "ridge", "random_forest", "hist_gb"]:
+#     model = get_model(m)
+#     model.fit(X_train, y_train)
+#     print(f"Model: {m}")
+#     evaluate_data(model, X_test, y_test)
+#     print("-------------------------------")
 # model = get_model(args.model)
 # model.fit(X_train, y_train)
 
