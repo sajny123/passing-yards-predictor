@@ -15,11 +15,17 @@ def evaluate_data(model, X_test, y_test):
     y_pred = model.predict(X_test)
     print("R2 score: ", r2_score(y_test, y_pred))
     print ("RMSE: ", np.sqrt(mean_squared_error(y_test, y_pred)))
+    # residuals = y_test - y_pred
+    # plt.scatter(y_pred, residuals)
+    # plt.axhline(0, color='red')
+    # plt.xlabel("Predicted yards")
+    # plt.ylabel("Residuals")
+    # plt.show()
     return y_pred
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--model", type=str, required=True, choices=["linear", "ridge", "random_forest", "hist_gb"],)
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument("--model", type=str, required=True, choices=["linear", "ridge", "random_forest", "hist_gb"],)
+# args = parser.parse_args()
 
 df = pd.read_csv("data/qb_passing_2024.csv")
 df = add_features(df)
@@ -34,17 +40,15 @@ y = top_players["Yds"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-model = get_model(args.model)
-model.fit(X_train, y_train)
+for m in ["linear", "ridge", "random_forest", "hist_gb"]:
+    model = get_model(m)
+    model.fit(X_train, y_train)
+    print(f"Model: {m}")
+    evaluate_data(model, X_test, y_test)
+    print("-------------------------------")
+# model = get_model(args.model)
+# model.fit(X_train, y_train)
 
 
-print(f"Model: {args.model}")
-evaluate_data(model, X_test, y_test)
 
 
-# residuals = y_test - y_pred
-# plt.scatter(y_pred, residuals)
-# plt.axhline(0, color='red')
-# plt.xlabel("Predicted yards")
-# plt.ylabel("Residuals")
-# plt.show()

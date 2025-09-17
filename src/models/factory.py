@@ -7,7 +7,7 @@ def get_model(name: str):
     elif name == "ridge":
         return Ridge()
     elif name == "random_forest":
-        return RandomForestRegressor()
+        return RandomForestRegressor(random_state=42)
     elif name == "hist_gb":
         return HistGradientBoostingRegressor()
     else:
