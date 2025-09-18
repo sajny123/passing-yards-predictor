@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, KFold, cross_val_score
 from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 import matplotlib.pyplot as plt
@@ -45,6 +45,11 @@ print("Selected Features: ", selected)
 
 model = train_random_forest(X_train, y_train)
 evaluate_data(model, X_test, y_test)
+
+scores = cross_val_score(model, X_train, y_train, cv=5, scoring="r2")
+print("R2 scores for each fold: ", scores)
+print("Mean R2: ", np.mean(scores))
+print("Standard Deviation: ", np.std(scores))
 # for m in ["linear", "ridge", "random_forest", "hist_gb"]:
 #     model = get_model(m)
 #     model.fit(X_train, y_train)
