@@ -60,5 +60,9 @@ print("Standard Deviation: ", np.std(scores))
 # model.fit(X_train, y_train)
 
 
+import joblib
+
+joblib.dump(model, "models/final_model.pkl")
+print("Model saved to models/final_model.pkl")
 
 
